@@ -3,18 +3,20 @@
     <section class="profile">
       <HeaderTop title="我的"></HeaderTop>
       <section class="profile-number">
-        <!--这个router-view在App.vue显示-->
-        <router-link href="javascript:" class="profile-link" to="/login">
+        <!--这个router-view在App.vue显示,跳转的路由路径根据有没有登录（根据有没有userInfo._id）来决定-->
+        <router-link href="javascript:" class="profile-link" :to="userInfo._id ? '/userinfo' : 'login'">
           <div class="profile_image">
             <i class="iconfont icon-person"></i>
           </div>
           <div class="user-info">
-            <p class="user-info-top">登录/注册</p>
+            <!--这个是否显示根据是否是密码登录来确定，显示文本由是否是无登陆状态来确定-->
+            <p class="user-info-top" v-show="!userInfo.phone">{{userInfo.name || '登录/注册'}}</p>
             <p>
-                <span class="user-icon">
-                  <i class="iconfont icon-shouji icon-mobile"></i>
-                </span>
-              <span class="icon-mobile-number">暂无绑定手机号</span>
+              <span class="user-icon">
+                <i class="iconfont icon-shouji icon-mobile"></i>
+              </span>
+              <!--这个的显示文本根据是不是短信验证登录来确定，可以根据userInfo这个对象有没有phone这个属性来确定-->
+              <span class="icon-mobile-number">{{userInfo.phone || '暂无绑定手机号'}}</span>
             </p>
           </div>
           <span class="arrow">
@@ -90,16 +92,35 @@
           </div>
         </a>
       </section>
+      <!--增加的退出登录这一行，登录状态才显示-->
+      <section class="profile_my_order border-1px" v-show="userInfo._id">
+        <!-- 服务中心 -->
+        <mt-button type="danger" style="width:100%;" @click="logout">退出登录</mt-button>
+      </section>
     </section>
   </div>
 </template>
 
 <script>
   import HeaderTop from '../../components/HeaderTop/HeaderVue'
+  import {mapState} from 'vuex'
+  import {MessageBox,Toast} from 'mint-ui';
+
   export default {
     name: "Profile",
     components: {
       HeaderTop
+    },
+    computed: {
+      ...mapState(['userInfo'])
+    },
+    methods: {
+      logout() {
+        MessageBox.confirm('确定退出登陆吗?').then(action => {
+          this.$store.dispatch('logout')
+          Toast('退出登录成功')
+        });
+      }
     }
   }
 </script>

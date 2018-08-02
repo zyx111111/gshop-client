@@ -12,6 +12,7 @@
       </span>
       <span>外卖</span>
     </a>
+    <!--on属性是为当前选中项添加样式-->
     <a href="javascript:;" class="guide_item" :class="{on: '/search' == $route.path}" @click="goto('/search')">
       <span class="item_icon">
         <i class="iconfont icon-search"></i>
@@ -38,7 +39,7 @@
         name: "FooterGuide",
         methods: {
           goto(path) {
-            this.$router.replace(path)
+            this.$router.replace(path);
           }
         }
     }
@@ -47,7 +48,7 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixins.styl"
   .footer_guide  //footer
-    top-border-1px(#e4e4e4)    //mixins.styl定义的函数
+    top-border-1px(#e4e4e4)
     position fixed
     z-index 100
     left 0

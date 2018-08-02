@@ -7,9 +7,20 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     import FooterGuide from './components/FooterGuide/FooterGuide'
+
     export default {
         name: "App",
+        mounted () {
+          //获取商家地址
+          this.getAdress()
+          //获取用户信息（从session中，实现自动登录）
+          this.getUserInfo()
+        },
+        methods : {
+          ...mapActions(['getAdress','getUserInfo'])
+        },
         components: {
           FooterGuide
         }
